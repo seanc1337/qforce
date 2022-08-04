@@ -17,7 +17,6 @@
 package nl.qnh.qforce.domain;
 
 import java.time.LocalDate;
-
 /**
  * The domain class representing a Star Wars movie.
  *
