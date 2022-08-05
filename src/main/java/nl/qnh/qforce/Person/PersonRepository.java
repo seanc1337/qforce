@@ -1,6 +1,6 @@
-package nl.qnh.qforce.Repository;
+package nl.qnh.qforce.Person;
 
-import nl.qnh.qforce.SWAPIObject.SWAPIPerson;
+import nl.qnh.qforce.domain.Person;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
