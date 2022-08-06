@@ -2,38 +2,42 @@ package nl.qnh.qforce.Person;
 
 //import nl.qnh.qforce.Movie.MovieRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.Resources.StarWarsApi;
-import nl.qnh.qforce.domain.Movie;
-import org.springframework.beans.factory.annotation.Autowired;
+import nl.qnh.qforce.domain.Person;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class PersonServiceImpl {
+public class PersonServiceImpl implements PersonService {
 
 
 //    private final PersonRepository personRepository;
 //
 //    private final MovieRepository movieRepository;
 
+    private final RestTemplate restTemplate;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final PersonMapper personMapper = new PersonMapper(objectMapper);
 
-    public List<SWAPIPerson> getPersons() {
-        List<SWAPIPerson> swapiPersons;
+    public PersonServiceImpl(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
-        String url = "https://swapi.dev/api/people";
+    @Override
+    public List<Person> search(String query) {
+        String result = restTemplate.getForObject(query, String.class);
+        List<SWAPIPerson> swapiPersons = personMapper.fromJsonToSWAPIPerson(result);
 
-        RestTemplate restTemplate = new RestTemplate();
+        return null;
+    }
 
-        String personResult = restTemplate.getForObject(url, String.class);
-
-        swapiPersons = personMapper.fromJsonToSWAPIPerson(personResult);
-
-        return swapiPersons;
+    @Override
+    public Optional<Person> get(long id) {
+        return Optional.empty();
     }
 
 //    /**

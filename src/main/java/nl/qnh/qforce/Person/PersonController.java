@@ -1,23 +1,21 @@
 package nl.qnh.qforce.Person;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.qnh.qforce.Resources.Configuration;
 import nl.qnh.qforce.domain.Person;
-import nl.qnh.qforce.Movie.MovieMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class PersonController {
 
     private final PersonServiceImpl personService;
-    private final String baseURL = "https://swapi.dev/api/";
+    private final Configuration configuration;
 
-    public PersonController(PersonServiceImpl personService) {
+    public PersonController(PersonServiceImpl personService, Configuration configuration) {
         this.personService = personService;
+        this.configuration = configuration;
     }
 
 //    /**
@@ -41,9 +39,10 @@ public class PersonController {
      * @return The list of persons
      */
     @GetMapping(value = "/persons")
-    public ResponseEntity<List<SWAPIPerson>> getPersons() {
-        List<SWAPIPerson> swapiPersons = this.personService.getPersons();
+    public ResponseEntity<List<Person>> getPersons(@RequestParam String name) {
+        String query = configuration.getBaseURL() + "people" + "?name=" + name;
+        List<Person> swapiPersonList = personService.search(query);
 
-        return ResponseEntity.ok(swapiPersons);
+        return null;
     }
 }
