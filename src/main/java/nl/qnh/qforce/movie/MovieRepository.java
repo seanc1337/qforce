@@ -1,6 +1,5 @@
-package nl.qnh.qforce.Movie;
+package nl.qnh.qforce.movie;
 
-import nl.qnh.qforce.domain.Movie;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

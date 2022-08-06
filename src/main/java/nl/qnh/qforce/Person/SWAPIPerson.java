@@ -1,31 +1,23 @@
 package nl.qnh.qforce.Person;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import nl.qnh.qforce.Movie.SWAPIMovie;
-import nl.qnh.qforce.domain.Gender;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import nl.qnh.qforce.domain.Movie;
-import nl.qnh.qforce.domain.Person;
-import org.hibernate.annotations.Cascade;
+import nl.qnh.qforce.movie.MovieModel;
+import nl.qnh.qforce.movie.SWAPIMovie;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builders
-
-public class SWAPIPerson {
-
-    private Integer count;
-    private String next;
-    private String previous;
-    private String[] results;
+public class SWAPIPerson implements Serializable {
+    @Id
+    private String id;
     private String birthYear;
     private String eyeColor;
     private String[] films;
@@ -40,42 +32,16 @@ public class SWAPIPerson {
     private String edited;
     private String[] species;
     private String[] starships;
-    @Id
     private String url;
     private String[] vehicles;
 
-    public Integer getCount() {
-        return count;
+    public String getId() {
+        return id;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setId(String id) {
+        this.id = id;
     }
-
-    public String getNext() {
-        return next;
-    }
-
-    public void setNext(String next) {
-        this.next = next;
-    }
-
-    public String getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(String previous) {
-        this.previous = previous;
-    }
-
-    public String[] getResults() {
-        return results;
-    }
-
-    public void setResults(String[] results) {
-        this.results = results;
-    }
-
     @JsonGetter("birth_year")
     public String getBirthYear() {
         return birthYear;
@@ -207,4 +173,5 @@ public class SWAPIPerson {
     public void setVehicles(String[] vehicles) {
         this.vehicles = vehicles;
     }
+
 }

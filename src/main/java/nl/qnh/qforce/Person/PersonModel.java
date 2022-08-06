@@ -4,9 +4,8 @@ import nl.qnh.qforce.domain.Gender;
 import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +18,7 @@ public class PersonModel implements Person {
     private Gender gender;
     private Integer height;
     private Integer weight;
+//    private List<Movie> movies;
 
     public void setId(long id) {
         this.id = id;

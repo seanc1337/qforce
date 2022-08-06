@@ -1,6 +1,6 @@
 package nl.qnh.qforce.Person;
 
-import nl.qnh.qforce.Resources.Configuration;
+import nl.qnh.qforce.resources.Configuration;
 import nl.qnh.qforce.domain.Person;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +39,10 @@ public class PersonController {
      * @return The list of persons
      */
     @GetMapping(value = "/persons")
-    public ResponseEntity<List<Person>> getPersons(@RequestParam String name) {
-        String query = configuration.getBaseURL() + "people" + "?name=" + name;
-        List<Person> swapiPersonList = personService.search(query);
+    public ResponseEntity<List<Person>> getPersons(@RequestParam(value = "name") String name) {
+        String personQuery = configuration.getBaseURL() + "people" + "?search=" + name;
+        List<Person> personList = personService.search(personQuery);
 
-        return null;
+        return ResponseEntity.ok(personList);
     }
 }

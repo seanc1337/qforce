@@ -1,10 +1,6 @@
-package nl.qnh.qforce.Movie;
+package nl.qnh.qforce.movie;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

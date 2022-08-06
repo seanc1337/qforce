@@ -1,4 +1,4 @@
-package nl.qnh.qforce.Movie;
+package nl.qnh.qforce.movie;
 
 import nl.qnh.qforce.domain.Movie;
 

@@ -1,4 +1,4 @@
-package nl.qnh.qforce.Resources;
+package nl.qnh.qforce.resources;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

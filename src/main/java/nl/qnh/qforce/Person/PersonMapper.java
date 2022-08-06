@@ -1,48 +1,50 @@
 package nl.qnh.qforce.Person;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.Person.SWAPIPerson;
 import nl.qnh.qforce.domain.Gender;
+import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
+import nl.qnh.qforce.movie.MovieMapper;
+import nl.qnh.qforce.movie.MovieModel;
+import nl.qnh.qforce.movie.SWAPIMovie;
+import nl.qnh.qforce.response.SWAPIResponse;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PersonMapper {
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public PersonMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    public List<SWAPIPerson> fromJsonToSWAPIPerson(String result) {
-        List<SWAPIPerson> swapiPersons = new ArrayList<>();
-        try {
-            JsonNode json = objectMapper.readTree(result);
+    public List<Person> mapToPersonModel(SWAPIResponse swapiResponse) {
+        MovieMapper movieMapper = new MovieMapper(objectMapper);
+        List<Person> persons = new ArrayList<>();
+        List<Movie> movies = new ArrayList<>();
 
-            String jsonResult = json.toString();
+        for (SWAPIPerson swapiPerson : swapiResponse.getResults()) {
+            PersonModel personModel = new PersonModel();
+            personModel.setName(swapiPerson.getName());
+            personModel.setGender(Gender.valueOf(swapiPerson.getGender().toUpperCase()));
+            personModel.setHeight(Integer.parseInt(swapiPerson.getHeight()));
+            personModel.setWeight(Integer.valueOf(swapiPerson.getMass()));
+            personModel.setBirthYear(swapiPerson.getBirthYear());
+            personModel.setId(Long.parseLong("1"));
 
-            SWAPIPerson swapiPersonToAdd = this.objectMapper.readValue(jsonResult, SWAPIPerson.class);
-            swapiPersons.add(swapiPersonToAdd);
-
-            return swapiPersons;
-        } catch (Exception e) {
-            e.printStackTrace();
+//            for (String film : swapiPerson.getFilms()) {
+//                SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
+//                if(swapiMovie != null) {
+//                    MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
+//                    movies.add(movieModel);
+//                }
+//            }
+//            personModel.setMovies(movies);
+            persons.add(personModel);
         }
-        return swapiPersons;
+        return persons;
     }
-
-//    public Person fromJsonToSWAPIPerson (String result, Long id) {
-//        Person newPerson  = new SWAPIPerson();
-//        try {
-//            newPerson = this.objectMapper.readValue(result, SWAPIPerson.class);
-//            ((SWAPIPerson) newPerson).id = id;
-//
-//            return newPerson;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return newPerson;
-//    }
 }

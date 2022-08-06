@@ -1,6 +1,6 @@
 package nl.qnh.qforce;
 
-import nl.qnh.qforce.Resources.Configuration;
+import nl.qnh.qforce.resources.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
