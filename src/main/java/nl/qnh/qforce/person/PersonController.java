@@ -1,4 +1,4 @@
-package nl.qnh.qforce.Person;
+package nl.qnh.qforce.person;
 
 import nl.qnh.qforce.resources.Configuration;
 import nl.qnh.qforce.domain.Person;

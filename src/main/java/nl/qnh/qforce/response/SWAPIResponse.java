@@ -1,6 +1,6 @@
 package nl.qnh.qforce.response;
 
-import nl.qnh.qforce.Person.SWAPIPerson;
+import nl.qnh.qforce.person.SWAPIPerson;
 
 import java.util.ArrayList;
 import java.util.List;

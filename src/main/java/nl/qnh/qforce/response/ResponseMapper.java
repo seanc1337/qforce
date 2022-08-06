@@ -1,13 +1,6 @@
 package nl.qnh.qforce.response;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.Person.PersonModel;
-import nl.qnh.qforce.Person.SWAPIPerson;
-import nl.qnh.qforce.domain.Person;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ResponseMapper {
 

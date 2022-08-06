@@ -1,12 +1,9 @@
-package nl.qnh.qforce.Person;
+package nl.qnh.qforce.person;
 
 //import nl.qnh.qforce.Movie.MovieRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.movie.MovieMapper;
-import nl.qnh.qforce.movie.MovieModel;
-import nl.qnh.qforce.movie.SWAPIMovie;
 import nl.qnh.qforce.response.ResponseMapper;
 import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.response.SWAPIResponse;
@@ -14,7 +11,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

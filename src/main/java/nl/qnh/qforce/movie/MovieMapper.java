@@ -1,12 +1,6 @@
 package nl.qnh.qforce.movie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.Person.PersonModel;
-import nl.qnh.qforce.Person.SWAPIPerson;
-import nl.qnh.qforce.domain.Movie;
-import nl.qnh.qforce.domain.Person;
-
-import java.util.List;
 
 public class MovieMapper {
     public ObjectMapper objectMapper;

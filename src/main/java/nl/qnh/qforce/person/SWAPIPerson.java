@@ -1,18 +1,10 @@
-package nl.qnh.qforce.Person;
+package nl.qnh.qforce.person;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import nl.qnh.qforce.domain.Movie;
-import nl.qnh.qforce.movie.MovieModel;
-import nl.qnh.qforce.movie.SWAPIMovie;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class SWAPIPerson implements Serializable {

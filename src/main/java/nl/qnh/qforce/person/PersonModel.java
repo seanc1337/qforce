@@ -1,11 +1,10 @@
-package nl.qnh.qforce.Person;
+package nl.qnh.qforce.person;
 
 import nl.qnh.qforce.domain.Gender;
 import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

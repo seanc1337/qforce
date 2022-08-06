@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package nl.qnh.qforce.Person;
+package nl.qnh.qforce.person;
 
 import nl.qnh.qforce.domain.Person;
 
