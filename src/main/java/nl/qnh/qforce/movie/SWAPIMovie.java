@@ -7,10 +7,6 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
 public class SWAPIMovie {
 
     private String[] characters;

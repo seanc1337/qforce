@@ -1,10 +1,14 @@
 package nl.qnh.qforce.person;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import nl.qnh.qforce.domain.Gender;
 import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
+import nl.qnh.qforce.movie.SWAPIMovie;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +21,8 @@ public class PersonModel implements Person {
     private Gender gender;
     private Integer height;
     private Integer weight;
-//    private List<Movie> movies;
+    @OneToMany(targetEntity = SWAPIMovie.class, cascade = CascadeType.ALL)
+    private List<Movie> movies = new ArrayList<>();
 
     public void setId(long id) {
         this.id = id;
@@ -27,6 +32,7 @@ public class PersonModel implements Person {
         this.name = name;
     }
 
+    @JsonSetter("birth_year")
     public void setBirthYear(String birthYear) {
         this.birthYear = birthYear;
     }
@@ -41,6 +47,10 @@ public class PersonModel implements Person {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
@@ -75,6 +85,6 @@ public class PersonModel implements Person {
 
     @Override
     public List<Movie> getMovies() {
-        return null;
+        return movies;
     }
 }

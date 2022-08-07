@@ -1,48 +1,114 @@
 package nl.qnh.qforce.person;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.qnh.qforce.domain.Gender;
 import nl.qnh.qforce.domain.Movie;
 import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.movie.MovieMapper;
+import nl.qnh.qforce.movie.MovieModel;
+import nl.qnh.qforce.movie.SWAPIMovie;
 import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PersonMapper {
     private final ObjectMapper objectMapper;
     private RestTemplate restTemplate = new RestTemplate();
+    private Map<String, Integer> physiqueMap = new HashMap<>();
+    private Map<String, Gender> genderMap = new HashMap<>();
 
     public PersonMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+        physiqueMap.put("unknown", 0);
+        genderMap.put("hermaphrodite", Gender.NOT_APPLICABLE);
+        genderMap.put("n/a", Gender.UNKNOWN);
+        genderMap.put("none", Gender.NOT_APPLICABLE);
     }
 
     public List<Person> mapToPersonModel(SWAPIResponse swapiResponse) {
         MovieMapper movieMapper = new MovieMapper(objectMapper);
         List<Person> persons = new ArrayList<>();
-        List<Movie> movies = new ArrayList<>();
 
         for (SWAPIPerson swapiPerson : swapiResponse.getResults()) {
+            List<Movie> movies = new ArrayList<>();
             PersonModel personModel = new PersonModel();
             personModel.setName(swapiPerson.getName());
-            personModel.setGender(Gender.valueOf(swapiPerson.getGender().toUpperCase()));
-            personModel.setHeight(Integer.parseInt(swapiPerson.getHeight()));
-            personModel.setWeight(Integer.valueOf(swapiPerson.getMass()));
-            personModel.setBirthYear(swapiPerson.getBirthYear());
-            personModel.setId(Long.parseLong("1"));
 
-//            for (String film : swapiPerson.getFilms()) {
-//                SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
-//                if(swapiMovie != null) {
-//                    MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
-//                    movies.add(movieModel);
-//                }
-//            }
-//            personModel.setMovies(movies);
+            replaceUnknownValues(swapiPerson, personModel);
+
+            personModel.setBirthYear(swapiPerson.getBirthYear());
+            personModel.setId(getIdFromUrl(swapiPerson));
+
+            for (String film : swapiPerson.getFilms()) {
+                SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
+                if(swapiMovie != null) {
+                    MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
+                    movies.add(movieModel);
+                }
+            }
+            personModel.setMovies(movies);
             persons.add(personModel);
         }
         return persons;
+    }
+
+    public Person mapToPersonModel(String result) throws JsonProcessingException {
+        SWAPIPerson swapiPerson = objectMapper.readValue(result, SWAPIPerson.class);
+        MovieMapper movieMapper = new MovieMapper(objectMapper);
+
+        List<Movie> movies = new ArrayList<>();
+        PersonModel personModel = new PersonModel();
+        personModel.setName(swapiPerson.getName());
+
+        replaceUnknownValues(swapiPerson, personModel);
+
+        personModel.setBirthYear(swapiPerson.getBirthYear());
+        personModel.setId(getIdFromUrl(swapiPerson));
+
+        for (String film : swapiPerson.getFilms()) {
+            SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
+            if (swapiMovie != null) {
+                MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
+                movies.add(movieModel);
+            }
+        }
+        personModel.setMovies(movies);
+        return personModel;
+    }
+
+    private void replaceUnknownValues(SWAPIPerson swapiPerson, PersonModel personModel) {
+        if (physiqueMap.containsKey(swapiPerson.getMass())) {
+            personModel.setWeight(physiqueMap.get(swapiPerson.getMass()));
+        } else if (swapiPerson.getMass().contains(",")) {
+            String correctedMass = swapiPerson.getMass().replace(",", ".");
+            swapiPerson.setMass(correctedMass);
+            personModel.setWeight((int) Math.floor(Double.parseDouble(correctedMass)));
+        } else if (swapiPerson.getMass().contains(".")) {
+            personModel.setWeight((int) Math.floor(Double.parseDouble(swapiPerson.getMass())));
+        } else {
+            personModel.setWeight(Integer.parseInt(swapiPerson.getMass()));
+        }
+
+        if (physiqueMap.containsKey(swapiPerson.getHeight())) {
+            personModel.setHeight(physiqueMap.get(swapiPerson.getHeight()));
+        } else if (swapiPerson.getHeight().contains(".")) {
+            personModel.setHeight((int) Math.floor(Double.parseDouble(swapiPerson.getHeight())));
+        } else {
+            personModel.setHeight(Integer.parseInt(swapiPerson.getHeight()));
+        }
+
+        if (genderMap.containsKey(swapiPerson.getGender())) {
+            personModel.setGender(genderMap.get(swapiPerson.getGender()));
+        } else {
+            personModel.setGender(Gender.valueOf(swapiPerson.getGender().toUpperCase()));
+        }
+    }
+
+    public long getIdFromUrl(SWAPIPerson swapiPerson) {
+        String[] url = swapiPerson.getUrl().split("/");
+
+        return Long.parseLong(url[url.length - 1]);
     }
 }

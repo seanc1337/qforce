@@ -2,6 +2,7 @@ package nl.qnh.qforce.person;
 
 //import nl.qnh.qforce.Movie.MovieRepository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.qnh.qforce.movie.MovieMapper;
 import nl.qnh.qforce.response.ResponseMapper;
@@ -31,64 +32,28 @@ public class PersonServiceImpl implements PersonService {
         String personResult = restTemplate.getForObject(query, String.class);
         SWAPIResponse response = responseMapper.mapToSWAPIResponse(personResult);
         List<Person> persons = personMapper.mapToPersonModel(response);
+        while(response.getNext() != null) {
+            String nextResult = restTemplate.getForObject(response.getNext(), String.class);
+            SWAPIResponse nextResponse = responseMapper.mapToSWAPIResponse(nextResult);
+            persons.addAll(personMapper.mapToPersonModel(nextResponse));
+            response = nextResponse;
+        }
 
         return persons;
     }
 
     @Override
     public Optional<Person> get(long id) {
-        return Optional.empty();
+        String query = "https://swapi.dev/api/people/" + id;
+        String personResult = restTemplate.getForObject(query, String.class);
+        Optional<Person> newPerson = Optional.empty();
+        try {
+            Person person = personMapper.mapToPersonModel(personResult);
+            newPerson = Optional.of(person);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return newPerson;
     }
-
 }
-
-//    /**
-//     * Method for getting Persons from SWAPI and saving them to the in memory DB to avoid making a manual call through
-//     * it's own endpoint
-//     */
-//    @PostConstruct
-//    public void getAndSavePersonsToDb() {
-//        List<SWAPIPerson> swapiPersons;
-//
-//        String url = this.baseURL + "people/";
-//
-//        String personResult = this.restTemplate.getForObject(url, String.class);
-//
-//        if(personResult != null) {
-//            String personResultCorrected = replaceUnknownValues(personResult);
-//
-//            swapiPersons = personMapper.fromJsonToSWAPIPerson(personResultCorrected);
-//
-//            for (SWAPIPerson swapiPerson : swapiPersons) {
-//                movieMapper.getFilmsFromSWAPI(swapiPerson, restTemplate);
-//
-//                this.personService.saveMovies(swapiPerson.getMovies());
-//            }
-//
-//            this.personService.savePersons(swapiPersons);
-//        }
-//    }
-
-//    /**
-//     * Save list of persons to DB
-//     * @param persons List of persons
-//     * @return The list of persons
-//     */
-//    public List<SWAPIPerson> savePersons(@RequestBody List<SWAPIPerson> persons) {
-//
-//        personRepository.saveAll(persons);
-//
-//        return persons;
-//    }
-
-//    /**
-//     * Save the list of movies found per Person
-//     * @param movies List of movies per person
-//     * @return The list of movies
-//     */
-//    public List<Movie> saveMovies(@RequestBody List<Movie> movies) {
-//        movieRepository.saveAll(movies);
-//
-//        return movies;
-//    }
 

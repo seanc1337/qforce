@@ -5,11 +5,6 @@ import nl.qnh.qforce.person.SWAPIPerson;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builders
-
 public class SWAPIResponse {
 
     private Integer count;
