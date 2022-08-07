@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The Controller for usage of endpoints
+ * @author Sean
+ */
 @RestController
 public class PersonController {
 

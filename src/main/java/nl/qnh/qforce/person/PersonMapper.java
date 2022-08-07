@@ -13,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
+/**
+ * Mapper class for mapping SWAPIPersons to PersonModels
+ * @author Sean
+ */
 public class PersonMapper {
     private final ObjectMapper objectMapper;
     private RestTemplate restTemplate = new RestTemplate();
@@ -27,6 +31,11 @@ public class PersonMapper {
         genderMap.put("none", Gender.NOT_APPLICABLE);
     }
 
+    /**
+     * Returns a combined List(if multiple next pages) of persons
+     * @param swapiResponse The response from the Star Wars API
+     * @return List of people found
+     */
     public List<Person> mapToPersonModel(SWAPIResponse swapiResponse) {
         MovieMapper movieMapper = new MovieMapper(objectMapper);
         List<Person> persons = new ArrayList<>();
@@ -54,6 +63,12 @@ public class PersonMapper {
         return persons;
     }
 
+    /**
+     * Returns a single person by ID
+     * @param result the person found in String format from the Star Wars API
+     * @return the person found
+     * @throws JsonProcessingException exception through mapping
+     */
     public Person mapToPersonModel(String result) throws JsonProcessingException {
         SWAPIPerson swapiPerson = objectMapper.readValue(result, SWAPIPerson.class);
         MovieMapper movieMapper = new MovieMapper(objectMapper);
@@ -78,6 +93,11 @@ public class PersonMapper {
         return personModel;
     }
 
+    /**
+     * Mapping unknown values from Star Wars API to known values
+     * @param swapiPerson The SWAPIPPerson mapped from the Star Wars API result
+     * @param personModel The PersonModel to map swapiPerson to
+     */
     private void replaceUnknownValues(SWAPIPerson swapiPerson, PersonModel personModel) {
         if (physiqueMap.containsKey(swapiPerson.getMass())) {
             personModel.setWeight(physiqueMap.get(swapiPerson.getMass()));
@@ -106,6 +126,11 @@ public class PersonMapper {
         }
     }
 
+    /**
+     * Getting id from URL field in person result
+     * @param swapiPerson The person to get id from
+     * @return the id
+     */
     public long getIdFromUrl(SWAPIPerson swapiPerson) {
         String[] url = swapiPerson.getUrl().split("/");
 

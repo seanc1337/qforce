@@ -15,6 +15,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The person service to search and retrieve persons.
+ *
+ * @author Sean
+ */
 @Service
 public class PersonServiceImpl implements PersonService {
     private final RestTemplate restTemplate;
@@ -27,6 +32,12 @@ public class PersonServiceImpl implements PersonService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
+    /**
+     * Searches for persons.
+     *
+     * @param query the query string
+     * @return the list of persons
+     */
     @Override
     public List<Person> search(String query) {
         String personResult = restTemplate.getForObject(query, String.class);
@@ -42,6 +53,12 @@ public class PersonServiceImpl implements PersonService {
         return persons;
     }
 
+    /**
+     * Returns the person with the provided id.
+     *
+     * @param id the id of the person
+     * @return the person
+     */
     @Override
     public Optional<Person> get(long id) {
         String query = "https://swapi.dev/api/people/" + id;
