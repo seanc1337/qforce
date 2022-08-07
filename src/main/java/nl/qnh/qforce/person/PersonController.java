@@ -1,7 +1,5 @@
 package nl.qnh.qforce.person;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import nl.qnh.qforce.resources.Configuration;
 import nl.qnh.qforce.domain.Person;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +15,9 @@ import java.util.Optional;
 public class PersonController {
 
     private final PersonServiceImpl personService;
-    private final Configuration configuration;
 
-    public PersonController(PersonServiceImpl personService, Configuration configuration) {
+    public PersonController(PersonServiceImpl personService) {
         this.personService = personService;
-        this.configuration = configuration;
     }
 
     /**
@@ -45,9 +41,8 @@ public class PersonController {
      * @return The list of persons
      */
     @GetMapping(value = "/persons")
-    public ResponseEntity<List<Person>> getPersons(@RequestParam(value = "name") String name) {
-        String personsQuery = configuration.getBaseURL() + "people" + "?search=" + name;
-        List<Person> personList = personService.search(personsQuery);
+    public ResponseEntity<List<Person>> getPersons(@RequestParam(value = "q") String name) {
+        List<Person> personList = personService.search(name);
         if (personList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

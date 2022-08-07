@@ -1,11 +1,13 @@
 package nl.qnh.qforce.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper class for mapping Star Wars API result String to SWAPIResponse
  * @author Sean
  */
+@Service
 public class ResponseMapper {
 
     private final ObjectMapper objectMapper;

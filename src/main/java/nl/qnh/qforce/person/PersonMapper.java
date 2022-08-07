@@ -9,6 +9,7 @@ import nl.qnh.qforce.movie.MovieMapper;
 import nl.qnh.qforce.movie.MovieModel;
 import nl.qnh.qforce.movie.SWAPIMovie;
 import nl.qnh.qforce.response.SWAPIResponse;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -17,14 +18,16 @@ import java.util.*;
  * Mapper class for mapping SWAPIPersons to PersonModels
  * @author Sean
  */
+@Service
 public class PersonMapper {
     private final ObjectMapper objectMapper;
-    private RestTemplate restTemplate = new RestTemplate();
-    private Map<String, Integer> physiqueMap = new HashMap<>();
-    private Map<String, Gender> genderMap = new HashMap<>();
+    private final RestTemplate restTemplate;
+    private final Map<String, Integer> physiqueMap = new HashMap<>();
+    private final Map<String, Gender> genderMap = new HashMap<>();
 
-    public PersonMapper(ObjectMapper objectMapper) {
+    public PersonMapper(ObjectMapper objectMapper, final RestTemplate restTemplate) {
         this.objectMapper = objectMapper;
+        this.restTemplate = restTemplate;
         physiqueMap.put("unknown", 0);
         genderMap.put("hermaphrodite", Gender.NOT_APPLICABLE);
         genderMap.put("n/a", Gender.UNKNOWN);
@@ -51,7 +54,7 @@ public class PersonMapper {
             personModel.setId(getIdFromUrl(swapiPerson));
 
             for (String film : swapiPerson.getFilms()) {
-                SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
+                SWAPIMovie swapiMovie = getMovie(film);
                 if(swapiMovie != null) {
                     MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
                     movies.add(movieModel);
@@ -61,6 +64,10 @@ public class PersonMapper {
             persons.add(personModel);
         }
         return persons;
+    }
+
+    private SWAPIMovie getMovie(String film) {
+        return restTemplate.getForObject(film, SWAPIMovie.class);
     }
 
     /**
@@ -83,7 +90,7 @@ public class PersonMapper {
         personModel.setId(getIdFromUrl(swapiPerson));
 
         for (String film : swapiPerson.getFilms()) {
-            SWAPIMovie swapiMovie = restTemplate.getForObject(film, SWAPIMovie.class);
+            SWAPIMovie swapiMovie = getMovie(film);
             if (swapiMovie != null) {
                 MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
                 movies.add(movieModel);

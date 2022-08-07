@@ -4,11 +4,10 @@ package nl.qnh.qforce.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.movie.MovieMapper;
+import nl.qnh.qforce.resources.SWAPIConfiguration;
 import nl.qnh.qforce.response.ResponseMapper;
 import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.response.SWAPIResponse;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,13 +22,15 @@ import java.util.Optional;
 @Service
 public class PersonServiceImpl implements PersonService {
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final PersonMapper personMapper = new PersonMapper(objectMapper);
-    private final ResponseMapper responseMapper = new ResponseMapper(objectMapper);
-    private final MovieMapper movieMapper = new MovieMapper(objectMapper);
+    private final SWAPIConfiguration swapiConfiguration;
+    private final PersonMapper personMapper;
+    private final ResponseMapper responseMapper;
 
-    public PersonServiceImpl(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
+    public PersonServiceImpl(RestTemplate restTemplate, final SWAPIConfiguration swapiConfiguration, final PersonMapper personMapper, final ResponseMapper responseMapper) {
+        this.restTemplate = restTemplate;
+        this.swapiConfiguration = swapiConfiguration;
+        this.personMapper = personMapper;
+        this.responseMapper = responseMapper;
     }
 
     /**
@@ -40,10 +41,11 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public List<Person> search(String query) {
-        String personResult = restTemplate.getForObject(query, String.class);
+        String personsQuery = getPeopleEndpoint() + "?search=" + query;
+        String personResult = restTemplate.getForObject(personsQuery, String.class);
         SWAPIResponse response = responseMapper.mapToSWAPIResponse(personResult);
         List<Person> persons = personMapper.mapToPersonModel(response);
-        while(response.getNext() != null) {
+        while (response.getNext() != null) {
             String nextResult = restTemplate.getForObject(response.getNext(), String.class);
             SWAPIResponse nextResponse = responseMapper.mapToSWAPIResponse(nextResult);
             persons.addAll(personMapper.mapToPersonModel(nextResponse));
@@ -61,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public Optional<Person> get(long id) {
-        String query = "https://swapi.dev/api/people/" + id;
+        String query = getPeopleEndpoint() + "/" + id;
         String personResult = restTemplate.getForObject(query, String.class);
         Optional<Person> newPerson = Optional.empty();
         try {
@@ -71,6 +73,10 @@ public class PersonServiceImpl implements PersonService {
             e.printStackTrace();
         }
         return newPerson;
+    }
+
+    private String getPeopleEndpoint() {
+        return swapiConfiguration.getBaseURL() + swapiConfiguration.getPeopleEndpoint();
     }
 }
 
