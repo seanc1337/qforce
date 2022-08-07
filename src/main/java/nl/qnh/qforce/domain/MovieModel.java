@@ -1,4 +1,4 @@
-package nl.qnh.qforce.movie;
+package nl.qnh.qforce.domain;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSetter;

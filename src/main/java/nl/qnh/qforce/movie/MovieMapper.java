@@ -1,6 +1,7 @@
 package nl.qnh.qforce.movie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.qnh.qforce.domain.MovieModel;
 
 /**
  * Mapper class for mapping SWAPIMovies to MovieModels

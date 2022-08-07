@@ -2,11 +2,8 @@ package nl.qnh.qforce.person;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.qnh.qforce.domain.Gender;
-import nl.qnh.qforce.domain.Movie;
-import nl.qnh.qforce.domain.Person;
+import nl.qnh.qforce.domain.*;
 import nl.qnh.qforce.movie.MovieMapper;
-import nl.qnh.qforce.movie.MovieModel;
 import nl.qnh.qforce.movie.SWAPIMovie;
 import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.stereotype.Service;
