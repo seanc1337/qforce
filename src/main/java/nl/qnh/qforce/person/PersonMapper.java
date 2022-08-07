@@ -9,7 +9,10 @@ import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Mapper class for mapping SWAPIPersons to PersonModels
@@ -61,10 +64,6 @@ public class PersonMapper {
             persons.add(personModel);
         }
         return persons;
-    }
-
-    private SWAPIMovie getMovie(String film) {
-        return restTemplate.getForObject(film, SWAPIMovie.class);
     }
 
     /**
@@ -128,6 +127,10 @@ public class PersonMapper {
         } else {
             personModel.setGender(Gender.valueOf(swapiPerson.getGender().toUpperCase()));
         }
+    }
+
+    private SWAPIMovie getMovie(String film) {
+        return restTemplate.getForObject(film, SWAPIMovie.class);
     }
 
     /**

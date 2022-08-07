@@ -1,12 +1,9 @@
 package nl.qnh.qforce.person;
 
-//import nl.qnh.qforce.Movie.MovieRepository;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.resources.SWAPIConfiguration;
 import nl.qnh.qforce.response.ResponseMapper;
-import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,7 +23,8 @@ public class PersonServiceImpl implements PersonService {
     private final PersonMapper personMapper;
     private final ResponseMapper responseMapper;
 
-    public PersonServiceImpl(RestTemplate restTemplate, final SWAPIConfiguration swapiConfiguration, final PersonMapper personMapper, final ResponseMapper responseMapper) {
+    public PersonServiceImpl(RestTemplate restTemplate, final SWAPIConfiguration swapiConfiguration,
+                             final PersonMapper personMapper, final ResponseMapper responseMapper) {
         this.restTemplate = restTemplate;
         this.swapiConfiguration = swapiConfiguration;
         this.personMapper = personMapper;

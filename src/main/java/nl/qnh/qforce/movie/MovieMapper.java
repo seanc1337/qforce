@@ -2,11 +2,13 @@ package nl.qnh.qforce.movie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.qnh.qforce.domain.MovieModel;
+import org.springframework.stereotype.Service;
 
 /**
  * Mapper class for mapping SWAPIMovies to MovieModels
  * @author Sean
  */
+@Service
 public class MovieMapper {
     public ObjectMapper objectMapper;
 

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 @Entity
-public class SWAPIPerson implements Serializable {
+public class SWAPIPerson {
     @Id
     private String id;
     private String birthYear;
