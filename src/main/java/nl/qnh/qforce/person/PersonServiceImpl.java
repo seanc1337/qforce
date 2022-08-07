@@ -6,6 +6,7 @@ import nl.qnh.qforce.resources.SWAPIConfiguration;
 import nl.qnh.qforce.response.ResponseMapper;
 import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -67,7 +68,7 @@ public class PersonServiceImpl implements PersonService {
         try {
             Person person = personMapper.mapToPersonModel(personResult);
             newPerson = Optional.of(person);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return newPerson;
