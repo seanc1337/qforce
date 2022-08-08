@@ -1,8 +1,6 @@
 package nl.qnh.qforce.person;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import nl.qnh.qforce.domain.Person;
-import nl.qnh.qforce.resources.SWAPIConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +22,7 @@ class PersonServiceImplTest {
         assertNotNull(personService);
         List<Person> persons = personService.search("L");
         assertFalse(persons.isEmpty());
-        assertEquals(persons.size(), 37);
+        assertEquals(37, persons.size());
 
         List<Person> personsNotFound = personService.search("-1");
         assertTrue(personsNotFound.isEmpty());
@@ -35,12 +33,12 @@ class PersonServiceImplTest {
         assertNotNull(personService);
         Optional<Person> person = personService.get(1);
         assertTrue(person.isPresent());
-        assertEquals(person.get().getId(), 1);
+        assertEquals(1, person.get().getId());
 
         Exception exception = assertThrows(HttpClientErrorException.class, () -> {
             final Optional<Person> personNotFound = personService.get(0);
         });
-        assertEquals(exception.getMessage(), "404 NOT FOUND: "
-                + "\"" + "{" + "\"detail\":" + "\"Not found\"" + "}" + "\"" );
+        assertEquals("404 NOT FOUND: "
+                + "\"" + "{" + "\"detail\":" + "\"Not found\"" + "}" + "\"", exception.getMessage());
     }
 }

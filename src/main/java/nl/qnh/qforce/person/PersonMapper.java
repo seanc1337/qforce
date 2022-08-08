@@ -39,7 +39,7 @@ public class PersonMapper {
      * @param swapiResponse The response from the Star Wars API
      * @return List of people found
      */
-    public List<Person> mapToPersonModel(SWAPIResponse swapiResponse) {
+    public List<Person> mapToPersonModels(SWAPIResponse swapiResponse) {
         MovieMapper movieMapper = new MovieMapper(objectMapper);
         List<Person> persons = new ArrayList<>();
 
@@ -70,29 +70,33 @@ public class PersonMapper {
      * Returns a single person by ID
      * @param result the person found in String format from the Star Wars API
      * @return the person found
-     * @throws JsonProcessingException exception through mapping
      */
-    public Person mapToPersonModel(String result) throws JsonProcessingException {
-        SWAPIPerson swapiPerson = objectMapper.readValue(result, SWAPIPerson.class);
-        MovieMapper movieMapper = new MovieMapper(objectMapper);
-
-        List<Movie> movies = new ArrayList<>();
+    public Person mapToPersonModel(String result) {
         PersonModel personModel = new PersonModel();
-        personModel.setName(swapiPerson.getName());
+        try {
+            SWAPIPerson swapiPerson = objectMapper.readValue(result, SWAPIPerson.class);
+            MovieMapper movieMapper = new MovieMapper(objectMapper);
 
-        replaceUnknownValues(swapiPerson, personModel);
+            List<Movie> movies = new ArrayList<>();
+            personModel.setName(swapiPerson.getName());
 
-        personModel.setBirthYear(swapiPerson.getBirthYear());
-        personModel.setId(getIdFromUrl(swapiPerson));
+            replaceUnknownValues(swapiPerson, personModel);
 
-        for (String film : swapiPerson.getFilms()) {
-            SWAPIMovie swapiMovie = getMovie(film);
-            if (swapiMovie != null) {
-                MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
-                movies.add(movieModel);
+            personModel.setBirthYear(swapiPerson.getBirthYear());
+            personModel.setId(getIdFromUrl(swapiPerson));
+
+            for (String film : swapiPerson.getFilms()) {
+                SWAPIMovie swapiMovie = getMovie(film);
+                if (swapiMovie != null) {
+                    MovieModel movieModel = movieMapper.mapToMovieModel(swapiMovie);
+                    movies.add(movieModel);
+                }
             }
+            personModel.setMovies(movies);
+            return personModel;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        personModel.setMovies(movies);
         return personModel;
     }
 

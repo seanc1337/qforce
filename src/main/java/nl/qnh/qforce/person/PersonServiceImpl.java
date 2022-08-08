@@ -1,12 +1,10 @@
 package nl.qnh.qforce.person;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.qnh.qforce.domain.Person;
 import nl.qnh.qforce.resources.SWAPIConfiguration;
 import nl.qnh.qforce.response.ResponseMapper;
 import nl.qnh.qforce.response.SWAPIResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -43,11 +41,11 @@ public class PersonServiceImpl implements PersonService {
         String personsQuery = getPeopleEndpoint() + "?search=" + query;
         String personResult = restTemplate.getForObject(personsQuery, String.class);
         SWAPIResponse response = responseMapper.mapToSWAPIResponse(personResult);
-        List<Person> persons = personMapper.mapToPersonModel(response);
+        List<Person> persons = personMapper.mapToPersonModels(response);
         while (response.getNext() != null) {
             String nextResult = restTemplate.getForObject(response.getNext(), String.class);
             SWAPIResponse nextResponse = responseMapper.mapToSWAPIResponse(nextResult);
-            persons.addAll(personMapper.mapToPersonModel(nextResponse));
+            persons.addAll(personMapper.mapToPersonModels(nextResponse));
             response = nextResponse;
         }
 

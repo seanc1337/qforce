@@ -2,21 +2,16 @@ package nl.qnh.qforce.person;
 
 import nl.qnh.qforce.domain.Person;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 class PersonControllerTest {
@@ -32,7 +27,7 @@ class PersonControllerTest {
         assertNotNull(personService);
         ResponseEntity<Person> personFound = personController.getPersonById("1");
         assertNotNull(personFound);
-        assertEquals(personFound.getStatusCode(), HttpStatus.OK);
+        assertEquals(HttpStatus.OK, personFound.getStatusCode());
     }
 
     @Test
@@ -41,7 +36,7 @@ class PersonControllerTest {
         assertNotNull(personService);
         ResponseEntity<List<Person>> persons = personController.getPersons("L");
         assertNotNull(persons);
-        assertEquals(persons.getBody().size(), 37);
+        assertEquals(37, Objects.requireNonNull(persons.getBody()).size());
         assertEquals(persons.getStatusCode(), HttpStatus.OK);
     }
 }

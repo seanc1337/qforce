@@ -23,6 +23,7 @@ public class SWAPIMovie {
     private String title;
     private String url;
     private String[] vehicles;
+    private String[] starships;
 
     public String[] getCharacters() {
         return characters;
@@ -129,5 +130,13 @@ public class SWAPIMovie {
 
     public void setVehicles(String[] vehicles) {
         this.vehicles = vehicles;
+    }
+
+    public String[] getStarships() {
+        return starships;
+    }
+
+    public void setStarships(final String[] starships) {
+        this.starships = starships;
     }
 }
